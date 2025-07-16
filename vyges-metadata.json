@@ -10,7 +10,7 @@
   "design_type": ["analog", "mixed-signal"],
   "maturity": "prototype",
   "created": "2025-01-27T10:00:00Z",
-  "updated": "2025-01-27T10:00:00Z",
+  "updated": "2025-01-27T12:00:00Z",
   "source": {
     "type": "git",
     "url": "https://github.com/vyges/programmable-adc",
@@ -176,15 +176,22 @@
   },
   "test": {
     "coverage": true,
-    "testbenches": ["systemverilog", "hspice"],
-    "simulators": ["vcs", "hspice", "ams_designer"],
+    "testbenches": ["systemverilog", "hspice", "cadence_behavioral"],
+    "simulators": ["vcs", "hspice", "ams_designer", "spectre", "virtuoso", "calibre", "verilator", "icarus"],
     "status": "passing",
     "test_requirements": [
       "DNL/INL measurement with histogram method",
       "SNR/SFDR measurement with FFT analysis",
       "PGA gain accuracy verification",
       "Power consumption measurement",
-      "Temperature sensitivity analysis"
+      "Temperature sensitivity analysis",
+      "Cadence PDK behavioral model verification",
+      "Circuit-level performance validation",
+      "Calibration mechanism testing",
+      "Multi-simulator compatibility verification",
+      "Spectre simulation with device models and process corners",
+      "Virtuoso schematic capture and layout verification",
+      "LVS verification with Calibre integration"
     ]
   },
   "flows": {
@@ -207,22 +214,56 @@
     "ic_compiler": {
       "status": "tested",
       "description": "Layout generation"
+    },
+    "cadence_pdk": {
+      "status": "verified",
+      "description": "Cadence PDK-specific circuit implementation with behavioral models, Spectre simulation, and Virtuoso layout support"
+    },
+    "spectre": {
+      "status": "verified",
+      "description": "Cadence Spectre analog circuit simulation with device models and process corners"
+    },
+    "virtuoso": {
+      "status": "verified",
+      "description": "Virtuoso schematic capture and layout export with LVS verification"
+    },
+    "verilator": {
+      "status": "verified",
+      "description": "Fast SystemVerilog simulation with coverage analysis"
+    },
+    "icarus": {
+      "status": "verified",
+      "description": "Open-source SystemVerilog simulation"
     }
   },
   "asic": {
     "flavor": "analog",
-    "pdks": ["40nm_ulp"],
+    "pdks": ["40nm_ulp", "cadence_40nm_ulp"],
     "synthesis_tool": "design_compiler",
     "layout_tool": "ic_compiler",
     "clock_freq_mhz": 50,
     "constraints": ["timing.sdc"],
-    "tools": ["hspice", "ams_designer", "vcs", "design_compiler", "ic_compiler"],
+    "tools": ["hspice", "ams_designer", "vcs", "design_compiler", "ic_compiler", "spectre", "virtuoso", "calibre"],
     "technology": "40nm Ultra Low Power",
     "supply_voltage": "2.8V",
     "temperature_range": {
       "min": -40,
       "max": 125,
       "units": "°C"
+    },
+    "circuit_implementation": {
+      "pga": "rtl/cadence_pdk/pga_circuit_cadence.sv",
+      "sar_dac": "rtl/cadence_pdk/sar_dac_circuit_cadence.sv",
+      "comparator": "rtl/cadence_pdk/comparator_circuit_cadence.sv",
+      "sample_hold": "rtl/cadence_pdk/sample_hold_circuit_cadence.sv",
+      "testbench": "rtl/cadence_pdk/tb_cadence_circuit_blocks.sv",
+      "build_system": "rtl/cadence_pdk/Makefile",
+      "spectre_netlist": "rtl/cadence_pdk/programmable_adc_spectre.sp",
+      "lvs_netlist": "rtl/cadence_pdk/programmable_adc_lvs.sp",
+      "device_models": "rtl/cadence_pdk/models.scs",
+      "process_corners": "rtl/cadence_pdk/corners.scs",
+      "virtuoso_schematic": "rtl/cadence_pdk/virtuoso_schematic.cds",
+      "lvs_setup": "rtl/cadence_pdk/lvs_setup.tcl"
     }
   },
   "fpga": {
@@ -242,13 +283,25 @@
         "wrapper": "integration/adc_asic_wrapper.sv",
         "tb": "integration/adc_asic_tb.sv",
         "description": "ASIC integration wrapper"
+      },
+      {
+        "target": "cadence_pdk",
+        "wrapper": "rtl/cadence_pdk/",
+        "tb": "rtl/cadence_pdk/tb_cadence_circuit_blocks.sv",
+        "description": "Cadence PDK circuit implementation with behavioral models, Spectre simulation, and Virtuoso layout"
       }
     ],
     "guidelines": [
       "Separate analog and digital power domains",
       "Use shielded routing for analog signals",
       "Implement proper grounding strategy",
-      "Follow thermal management guidelines"
+      "Follow thermal management guidelines",
+      "Use Cadence PDK behavioral models for realistic simulation",
+      "Implement proper calibration mechanisms",
+      "Monitor circuit-level performance metrics",
+      "Use Spectre simulation with device models and process corners",
+      "Perform LVS verification with Calibre integration",
+      "Follow Virtuoso schematic-to-layout flow"
     ]
   },
   "automation": {
@@ -272,13 +325,14 @@
     }
   },
   "categories": ["analog", "converter", "adc", "mixed-signal"],
-  "tags": ["adc", "sar", "programmable", "pga", "differential", "ultra-low-power", "40nm", "5msps", "16bit"],
-  "keywords": ["analog-to-digital converter", "SAR ADC", "programmable gain amplifier", "differential input", "ultra-low-power", "40nm technology", "5MSPS", "16-bit resolution"],
+  "tags": ["adc", "sar", "programmable", "pga", "differential", "ultra-low-power", "40nm", "5msps", "16bit", "cadence-pdk", "behavioral-models", "spectre-simulation", "virtuoso-layout", "lvs-verification"],
+  "keywords": ["analog-to-digital converter", "SAR ADC", "programmable gain amplifier", "differential input", "ultra-low-power", "40nm technology", "5MSPS", "16-bit resolution", "Cadence PDK", "behavioral models", "circuit simulation", "Spectre simulation", "Virtuoso layout", "LVS verification", "Calibre integration"],
   "documentation": {
     "design_spec": "docs/programmable_adc_design_spec.md",
     "user_manual": "docs/user_manual.md",
     "integration_guide": "docs/integration_guide.md",
-    "test_report": "docs/test_report.md"
+    "test_report": "docs/test_report.md",
+    "circuit_implementation": "rtl/cadence_pdk/README.md"
   },
   "reliability": {
     "temperature_range": {

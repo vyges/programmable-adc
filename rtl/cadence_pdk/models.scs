@@ -1,0 +1,223 @@
+//=============================================================================
+// Spectre Device Models for 40nm Ultra-Low-Power Technology
+//=============================================================================
+// Description: Device models for Cadence 40nm ULP technology
+// Author: Vyges IP Development Team
+// Date: 2024
+//=============================================================================
+
+//=============================================================================
+// NMOS Model
+//=============================================================================
+model nmos_40nm nmos
++ level=54
++ version=4.8
++ binunit=1
++ paramchk=1
++ mobmod=1
++ capmod=2
++ igcmod=1
++ igbmod=1
++ geomod=1
++ diomod=1
++ rdsmod=1
++ permod=1
++ acnqsmod=0
++ trnqsmod=0
++ tnom=27
++ toxe=1.6e-9
++ toxp=1.6e-9
++ toxm=1.6e-9
++ dtox=0
++ epsrox=3.9
++ wint=0
++ lint=0
++ ll=0
++ lw=0
++ lwl=0
++ wint=0
++ wl=0
++ ww=0
++ wwl=0
++ lint=0
++ nlx=0
++ wint=0
++ vth0=0.45
++ k1=0.4
++ k2=0
++ k3=0
++ k3b=0
++ w0=0
++ nlx=0
++ dvt0=1
++ dvt1=2
++ dvt2=-0.032
++ dvt0w=0
++ dvt1w=0
++ dvt2w=0
++ drout=0.56
++ dsub=0.56
++ vth0=0.45
++ ua=2.25e-9
++ ua1=4.31e-9
++ ub=7.61e-19
++ ub1=-1e-18
++ uc=0
++ uc1=0
++ u0=0.067
++ ute=-1.5
++ voff=-0.08
++ delta=0.01
++ rdsw=100
++ prwg=0
++ prwb=0
++ prt=0
++ eta0=0.08
++ etab=-0.07
++ pclm=0.12
++ pdiblc1=0.001
++ pdiblc2=0.001
++ pdiblcb=-0.005
++ fprout=0.2
++ pdits=0.08
++ pditsd=-0.23
++ pditsl=2.3e6
++ rsh=0
++ rswmin=0
++ rsw=100
++ wr=1
++ nf=1
++ min=0
++ xl=0
++ xw=0
++ binflag=0
+ends
+
+//=============================================================================
+// PMOS Model
+//=============================================================================
+model pmos_40nm pmos
++ level=54
++ version=4.8
++ binunit=1
++ paramchk=1
++ mobmod=1
++ capmod=2
++ igcmod=1
++ igbmod=1
++ geomod=1
++ diomod=1
++ rdsmod=1
++ permod=1
++ acnqsmod=0
++ trnqsmod=0
++ tnom=27
++ toxe=1.6e-9
++ toxp=1.6e-9
++ toxm=1.6e-9
++ dtox=0
++ epsrox=3.9
++ wint=0
++ lint=0
++ ll=0
++ lw=0
++ lwl=0
++ wint=0
++ wl=0
++ ww=0
++ wwl=0
++ lint=0
++ nlx=0
++ wint=0
++ vth0=-0.45
++ k1=0.4
++ k2=0
++ k3=0
++ k3b=0
++ w0=0
++ nlx=0
++ dvt0=1
++ dvt1=2
++ dvt2=-0.032
++ dvt0w=0
++ dvt1w=0
++ dvt2w=0
++ drout=0.56
++ dsub=0.56
++ vth0=-0.45
++ ua=2.25e-9
++ ua1=4.31e-9
++ ub=7.61e-19
++ ub1=-1e-18
++ uc=0
++ uc1=0
++ u0=0.025
++ ute=-1.5
++ voff=0.08
++ delta=0.01
++ rdsw=100
++ prwg=0
++ prwb=0
++ prt=0
++ eta0=0.08
++ etab=-0.07
++ pclm=0.12
++ pdiblc1=0.001
++ pdiblc2=0.001
++ pdiblcb=-0.005
++ fprout=0.2
++ pdits=0.08
++ pditsd=-0.23
++ pditsl=2.3e6
++ rsh=0
++ rswmin=0
++ rsw=100
++ wr=1
++ nf=1
++ min=0
++ xl=0
++ xw=0
++ binflag=0
+ends
+
+//=============================================================================
+// Switch Models
+//=============================================================================
+model chopper_switch switch
++ ron=50
++ roff=1e12
++ vt=0.5
+ends
+
+model sample_switch switch
++ ron=50
++ roff=1e12
++ vt=0.5
+ends
+
+model hold_switch switch
++ ron=100
++ roff=1e12
++ vt=0.5
+ends
+
+//=============================================================================
+// Capacitor Models
+//=============================================================================
+model cap_40nm capacitor
++ cj=1e-15
++ cjsw=1e-15
++ pb=0.7
++ pbsw=0.7
++ mj=0.5
++ mjsw=0.33
+ends
+
+//=============================================================================
+// Resistor Models
+//=============================================================================
+model res_40nm resistor
++ tc1=0.001
++ tc2=0.000001
++ rsh=100
+ends 
