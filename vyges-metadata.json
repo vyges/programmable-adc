@@ -1,0 +1,314 @@
+{
+  "$schema": "https://vyges.com/schema/v1/vyges-metadata.schema.json",
+  "x-version": "1.0.0",
+  "name": "vyges/programmable-adc",
+  "version": "1.0.0",
+  "description": "A high-performance, ultra-low-power programmable ADC with configurable resolution (12, 14, 16 bits), 3 simultaneous differential channels, and integrated PGA (gains 1,2,3,4). Achieves 5MSPS conversion rate with excellent linearity (DNL < 0.5 LSB, INL < 1 LSB) in 40nm ultra-low-power technology.",
+  "license": "Apache-2.0",
+  "template": "vyges-ip-template@1.0.0",
+  "target": ["asic"],
+  "design_type": ["analog", "mixed-signal"],
+  "maturity": "prototype",
+  "created": "2025-01-27T10:00:00Z",
+  "updated": "2025-01-27T10:00:00Z",
+  "source": {
+    "type": "git",
+    "url": "https://github.com/vyges/programmable-adc",
+    "commit": "main",
+    "private": false,
+    "containsEncryptedPayload": false,
+    "indexing": true
+  },
+  "maintainers": [
+    {
+      "name": "Vyges Development Team",
+      "email": "dev@vyges.com",
+      "github": "vyges-dev"
+    }
+  ],
+  "branding": {
+    "provider": "Vyges",
+    "logo": "https://vyges.com/images/logo.svg",
+    "website": "https://vyges.com/catalog/programmable-adc",
+    "usage": "Use of the logo is permitted for attribution or compatibility references only."
+  },
+  "interfaces": [
+    {
+      "type": "bus",
+      "direction": "input",
+      "protocol": "APB",
+      "width": 32,
+      "signals": [
+        { "name": "PCLK", "direction": "input", "type": "clock", "description": "APB clock signal (50 MHz)" },
+        { "name": "PRESETn", "direction": "input", "type": "reset", "active_level": "low", "description": "APB reset signal" },
+        { "name": "PADDR", "direction": "input", "width": 8, "type": "data", "description": "APB address bus" },
+        { "name": "PWDATA", "direction": "input", "width": 32, "type": "data", "description": "APB write data" },
+        { "name": "PRDATA", "direction": "output", "width": 32, "type": "data", "description": "APB read data" },
+        { "name": "PENABLE", "direction": "input", "type": "control", "description": "APB enable signal" },
+        { "name": "PWRITE", "direction": "input", "type": "control", "description": "APB write enable" },
+        { "name": "PSEL", "direction": "input", "type": "control", "description": "APB select signal" },
+        { "name": "PREADY", "direction": "output", "type": "control", "description": "APB ready signal" }
+      ]
+    },
+    {
+      "type": "analog",
+      "direction": "input",
+      "signals": [
+        { "name": "VIN0P", "direction": "input", "type": "analog", "voltage_range": "0V to 2.8V", "description": "Channel 0 positive input" },
+        { "name": "VIN0N", "direction": "input", "type": "analog", "voltage_range": "0V to 2.8V", "description": "Channel 0 negative input" },
+        { "name": "VIN1P", "direction": "input", "type": "analog", "voltage_range": "0V to 2.8V", "description": "Channel 1 positive input" },
+        { "name": "VIN1N", "direction": "input", "type": "analog", "voltage_range": "0V to 2.8V", "description": "Channel 1 negative input" },
+        { "name": "VIN2P", "direction": "input", "type": "analog", "voltage_range": "0V to 2.8V", "description": "Channel 2 positive input" },
+        { "name": "VIN2N", "direction": "input", "type": "analog", "voltage_range": "0V to 2.8V", "description": "Channel 2 negative input" },
+        { "name": "VREF", "direction": "input", "type": "analog", "voltage_range": "2.8V ±1%", "description": "Reference voltage" },
+        { "name": "VCM", "direction": "input", "type": "analog", "voltage_range": "1.4V ±2%", "description": "Common mode voltage" }
+      ]
+    },
+    {
+      "type": "power",
+      "direction": "input",
+      "signals": [
+        { "name": "VDDA", "direction": "input", "type": "power", "voltage": "2.8V ±5%", "description": "Analog supply voltage" },
+        { "name": "VSSA", "direction": "input", "type": "power", "voltage": "0V", "description": "Analog ground" }
+      ]
+    },
+    {
+      "type": "interrupt",
+      "direction": "output",
+      "signals": [
+        { "name": "adc_irq", "direction": "output", "type": "interrupt", "description": "ADC interrupt output" }
+      ]
+    },
+    {
+      "type": "status",
+      "direction": "output",
+      "signals": [
+        { "name": "busy_o", "direction": "output", "type": "status", "description": "Conversion busy indicator" },
+        { "name": "valid_o", "direction": "output", "type": "status", "description": "Data valid indicator" },
+        { "name": "data_o", "direction": "output", "width": 16, "type": "data", "description": "ADC conversion result" },
+        { "name": "channel_o", "direction": "output", "width": 2, "type": "status", "description": "Current channel number" }
+      ]
+    }
+  ],
+  "parameters": [
+    {
+      "name": "ADC_RESOLUTION",
+      "type": "enum",
+      "default": "16",
+      "description": "ADC resolution in bits",
+      "options": ["12", "14", "16"],
+      "units": "bits",
+      "required": false
+    },
+    {
+      "name": "PGA_GAIN",
+      "type": "enum",
+      "default": "1",
+      "description": "Programmable Gain Amplifier gain setting",
+      "options": ["1", "2", "3", "4"],
+      "units": "V/V",
+      "required": false
+    },
+    {
+      "name": "CONVERSION_RATE",
+      "type": "int",
+      "default": 5000000,
+      "description": "ADC conversion rate",
+      "range": { "min": 1000000, "max": 5000000 },
+      "units": "SPS",
+      "required": false
+    },
+    {
+      "name": "INPUT_BANDWIDTH",
+      "type": "int",
+      "default": 1000000,
+      "description": "Input signal bandwidth",
+      "range": { "min": 100000, "max": 2000000 },
+      "units": "Hz",
+      "required": false
+    },
+    {
+      "name": "SUPPLY_VOLTAGE",
+      "type": "float",
+      "default": 2.8,
+      "description": "Analog supply voltage",
+      "range": { "min": 2.5, "max": 3.0 },
+      "units": "V",
+      "required": false
+    }
+  ],
+  "performance": {
+    "conversion_rate": {
+      "value": 5000000,
+      "units": "SPS",
+      "description": "Maximum conversion rate"
+    },
+    "resolution": {
+      "value": 16,
+      "units": "bits",
+      "description": "Maximum resolution"
+    },
+    "dnl": {
+      "value": 0.5,
+      "units": "LSB",
+      "description": "Differential non-linearity"
+    },
+    "inl": {
+      "value": 1.0,
+      "units": "LSB",
+      "description": "Integral non-linearity"
+    },
+    "snr": {
+      "value": 70,
+      "units": "dB",
+      "description": "Signal-to-noise ratio"
+    },
+    "power_consumption": {
+      "value": 10,
+      "units": "mW",
+      "description": "Power consumption at 5MSPS"
+    },
+    "input_bandwidth": {
+      "value": 1000000,
+      "units": "Hz",
+      "description": "Input signal bandwidth"
+    }
+  },
+  "test": {
+    "coverage": true,
+    "testbenches": ["systemverilog", "hspice"],
+    "simulators": ["vcs", "hspice", "ams_designer"],
+    "status": "passing",
+    "test_requirements": [
+      "DNL/INL measurement with histogram method",
+      "SNR/SFDR measurement with FFT analysis",
+      "PGA gain accuracy verification",
+      "Power consumption measurement",
+      "Temperature sensitivity analysis"
+    ]
+  },
+  "flows": {
+    "hspice": {
+      "status": "verified",
+      "description": "Transistor-level simulation for analog blocks"
+    },
+    "ams_designer": {
+      "status": "verified",
+      "description": "Mixed-signal simulation for system verification"
+    },
+    "vcs": {
+      "status": "verified",
+      "description": "Digital RTL simulation"
+    },
+    "design_compiler": {
+      "status": "tested",
+      "description": "Digital synthesis flow"
+    },
+    "ic_compiler": {
+      "status": "tested",
+      "description": "Layout generation"
+    }
+  },
+  "asic": {
+    "flavor": "analog",
+    "pdks": ["40nm_ulp"],
+    "synthesis_tool": "design_compiler",
+    "layout_tool": "ic_compiler",
+    "clock_freq_mhz": 50,
+    "constraints": ["timing.sdc"],
+    "tools": ["hspice", "ams_designer", "vcs", "design_compiler", "ic_compiler"],
+    "technology": "40nm Ultra Low Power",
+    "supply_voltage": "2.8V",
+    "temperature_range": {
+      "min": -40,
+      "max": 125,
+      "units": "°C"
+    }
+  },
+  "fpga": {
+    "toolchain": "not_applicable",
+    "description": "Analog/mixed-signal design - FPGA not applicable"
+  },
+  "integration": {
+    "examples": [
+      {
+        "target": "simulation",
+        "wrapper": "integration/adc_wrapper.sv",
+        "tb": "integration/adc_tb.sv",
+        "description": "Mixed-signal simulation wrapper"
+      },
+      {
+        "target": "asic",
+        "wrapper": "integration/adc_asic_wrapper.sv",
+        "tb": "integration/adc_asic_tb.sv",
+        "description": "ASIC integration wrapper"
+      }
+    ],
+    "guidelines": [
+      "Separate analog and digital power domains",
+      "Use shielded routing for analog signals",
+      "Implement proper grounding strategy",
+      "Follow thermal management guidelines"
+    ]
+  },
+  "automation": {
+    "automation_level": "enhanced",
+    "minimal_required": ["name", "version", "license", "interfaces", "template", "target", "design_type", "maturity", "description", "source", "asic", "test", "flows"],
+    "recommended_for_automation": ["parameters", "performance", "integration", "documentation"],
+    "blocking_issues": []
+  },
+  "meta": {
+    "template": {
+      "generator": "vyges-cli",
+      "init_tool": "vyges-cli", 
+      "template_version": "1.0.0",
+      "generated_at": "2025-01-27T10:00:00Z"
+    },
+    "generated_by": "vyges-cli",
+    "schema": {
+      "version": "1.0.0",
+      "compatible_versions": ["1.0.0", "1.1.0"],
+      "generated_with": "vyges-cli"
+    }
+  },
+  "categories": ["analog", "converter", "adc", "mixed-signal"],
+  "tags": ["adc", "sar", "programmable", "pga", "differential", "ultra-low-power", "40nm", "5msps", "16bit"],
+  "keywords": ["analog-to-digital converter", "SAR ADC", "programmable gain amplifier", "differential input", "ultra-low-power", "40nm technology", "5MSPS", "16-bit resolution"],
+  "documentation": {
+    "design_spec": "docs/programmable_adc_design_spec.md",
+    "user_manual": "docs/user_manual.md",
+    "integration_guide": "docs/integration_guide.md",
+    "test_report": "docs/test_report.md"
+  },
+  "reliability": {
+    "temperature_range": {
+      "min": -40,
+      "max": 125,
+      "units": "°C"
+    },
+    "lifetime": {
+      "value": 10,
+      "units": "years",
+      "description": "Expected lifetime at 125°C"
+    },
+    "mtbf": {
+      "value": 1000000,
+      "units": "hours",
+      "description": "Mean time between failures"
+    }
+  },
+  "packaging": {
+    "package_type": "QFN48",
+    "pin_count": 48,
+    "thermal_resistance": {
+      "value": 25,
+      "units": "°C/W",
+      "description": "Junction-to-ambient thermal resistance"
+    },
+    "power_dissipation": {
+      "value": 10,
+      "units": "mW",
+      "description": "Maximum power dissipation"
+    }
+  }
+} 
