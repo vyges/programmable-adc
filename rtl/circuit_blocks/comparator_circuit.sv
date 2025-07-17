@@ -4,7 +4,7 @@
 // Description: High-speed comparator with preamp and latch
 //              Includes offset calibration and hysteresis control
 // Author: Vyges IP Development Team
-// Date: 2024
+// Date: 2025
 //=============================================================================
 
 module comparator_circuit #(

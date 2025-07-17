@@ -4,7 +4,7 @@
 // Description: High-speed comparator optimized for Cadence PDK
 //              Uses behavioral models and specifications from /docs
 // Author: Vyges IP Development Team
-// Date: 2024
+// Date: 2025
 //=============================================================================
 
 `include "disciplines.vams"

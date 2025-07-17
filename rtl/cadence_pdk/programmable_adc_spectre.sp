@@ -4,7 +4,7 @@
 // Description: Spectre-compatible netlist for programmable ADC
 //              Supports simulation and LVS verification
 // Author: Vyges IP Development Team
-// Date: 2024
+// Date: 2025
 //=============================================================================
 
 //=============================================================================

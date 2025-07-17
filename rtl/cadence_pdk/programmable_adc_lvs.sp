@@ -4,7 +4,7 @@
 // Description: LVS-compatible netlist for layout verification
 //              Simplified version for LVS comparison
 // Author: Vyges IP Development Team
-// Date: 2024
+// Date: 2025
 //=============================================================================
 
 //=============================================================================

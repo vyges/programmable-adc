@@ -8,7 +8,7 @@
 // Gains: 1, 2, 3, 4 (software configurable)
 // Architecture: Switched capacitor with op-amp
 // Author:       Vyges Development Team
-// Created:      2025-01-27
+// Created:     2025
 //=============================================================================
 
 module pga_stage (

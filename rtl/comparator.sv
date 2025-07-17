@@ -6,7 +6,7 @@
 //
 // Architecture: Dynamic latch comparator
 // Author:       Vyges Development Team
-// Created:      2025-01-27
+// Created:     2025
 //=============================================================================
 
 module comparator (

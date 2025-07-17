@@ -4,7 +4,7 @@
 // Description: Programmable Gain Amplifier with chopper stabilization
 //              Supports gains of 1x, 2x, 4x with high CMRR and PSRR
 // Author: Vyges IP Development Team
-// Date: 2024
+// Date: 2025
 //=============================================================================
 
 module pga_circuit #(

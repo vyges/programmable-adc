@@ -1,10 +1,9 @@
 #=============================================================================
-# Cadence PDK Circuit Implementation Makefile
+# Vyges Programmable ADC - Cadence PDK Makefile
 #=============================================================================
-# Description: Makefile for Cadence PDK circuit blocks simulation
-#              Supports multiple simulators and comprehensive testing
+# Description: Build and simulation automation for Cadence PDK flow
 # Author: Vyges IP Development Team
-# Date: 2024
+# Date: 2025
 #=============================================================================
 
 #=============================================================================

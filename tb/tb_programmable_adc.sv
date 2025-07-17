@@ -14,7 +14,7 @@
 // - Performance testing
 //
 // Author:       Vyges Development Team
-// Created:      2025-01-27
+// Created:     2025
 //=============================================================================
 
 `timescale 1ns/1ps

@@ -4,7 +4,7 @@
 // Description: SAR DAC array with binary-weighted capacitors
 //              Supports 12/14/16-bit resolution with calibration
 // Author: Vyges IP Development Team
-// Date: 2024
+// Date: 2025
 //=============================================================================
 
 module sar_dac_circuit #(

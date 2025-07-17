@@ -7,7 +7,7 @@
 //
 // Architecture: Successive Approximation
 // Author:       Vyges Development Team
-// Created:      2025-01-27
+// Created:     2025
 //=============================================================================
 
 module sar_controller (

@@ -4,7 +4,7 @@
 // Description: Sample & Hold circuit with transmission gate switches
 //              High-speed sampling with low droop and high accuracy
 // Author: Vyges IP Development Team
-// Date: 2024
+// Date: 2025
 //=============================================================================
 
 module sample_hold_circuit #(

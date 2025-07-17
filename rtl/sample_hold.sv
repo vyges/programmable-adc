@@ -6,7 +6,7 @@
 //
 // Architecture: Switched capacitor track and hold
 // Author:       Vyges Development Team
-// Created:      2025-01-27
+// Created:     2025
 //=============================================================================
 
 module sample_hold (

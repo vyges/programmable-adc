@@ -7,7 +7,7 @@
 //
 // Architecture: Binary-weighted capacitor array
 // Author:       Vyges Development Team
-// Created:      2025-01-27
+// Created:     2025
 //=============================================================================
 
 module dac_array (

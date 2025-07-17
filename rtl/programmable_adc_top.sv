@@ -9,7 +9,7 @@
 // Architecture: Successive Approximation Register (SAR)
 // Technology:   40nm Ultra Low Power
 // Author:       Vyges Development Team
-// Created:      2025-01-27
+// Created:     2025
 //=============================================================================
 
 module programmable_adc_top (
