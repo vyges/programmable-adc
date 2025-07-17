@@ -1,108 +1,150 @@
-[![Vyges IP Template](https://img.shields.io/badge/template-vyges--ip--template-blue)](https://github.com/vyges/vyges-ip-template)
-[![Use this template](https://img.shields.io/badge/Use%20this%20template-vyges--ip--template-brightgreen?style=for-the-badge)](https://github.com/vyges/vyges-ip-template/generate)
+[![Vyges IP](https://img.shields.io/badge/vyges-programmable--adc--ip-blue)](https://github.com/vyges/programmable-adc)
 ![License: Apache-2.0](https://img.shields.io/badge/License-Apache--2.0-blue.svg)
-![Build](https://github.com/vyges/vyges-ip-template/actions/workflows/test.yml/badge.svg)
+![Build](https://github.com/vyges/programmable-adc/actions/workflows/test.yml/badge.svg)
+![SystemVerilog](https://img.shields.io/badge/SystemVerilog-2025-brightgreen)
+![Cadence PDK](https://img.shields.io/badge/Cadence%20PDK-Supported-orange)
 
-# Vyges IP Template
+# Programmable ADC IP
 
-A minimal, production-ready template for building reusable SystemVerilog IP blocks with the Vyges ecosystem.
+A high-performance, programmable Analog-to-Digital Converter (ADC) IP core designed for mixed-signal SoC integration. Features include:
+
+🔧 **Core Features:**
+• Configurable resolution (8-16 bit)
+• Programmable sampling rates (1-100 MSPS)
+• Built-in PGA with gain control
+• SAR DAC with calibration
+• Advanced sample & hold circuit
+• Real-time performance monitoring
+
+🛠 **Design & Verification:**
+• SystemVerilog RTL implementation
+• Cadence PDK behavioral models
+• Spectre simulation support
+• Virtuoso layout integration
+• Calibre LVS verification
+• Comprehensive testbench suite
+
+📊 **Verification Tools:**
+• UVM-compliant testbenches
+• Coverage-driven verification
+• Automated test harness reporting
+• Multi-simulator support (VCS, Questa, Verilator)
+• Cadence Spectre/Calibre integration
+
+🎯 **Use Cases:**
+• IoT sensor interfaces
+• Audio processing systems
+• Medical instrumentation
+• Industrial control systems
+• High-speed data acquisition
+
+Built following Vyges IP development standards with automated documentation, verification flows, and integration examples.
 
 ## 🚀 Quickstart
 
-1. **Create Repository from Template:**
-   - Go to [https://github.com/vyges/vyges-ip-template/generate](https://github.com/vyges/vyges-ip-template/generate)
-   - Click "Use this template"
-   - Name your repository (e.g., `uart-controller`)
-   - Create repository
-
-2. **Clone Your New Repository:**
+1. **Clone the Repository:**
    ```bash
-   git clone https://github.com/your-username/your-repo.git
-   cd your-repo
+   git clone https://github.com/vyges/programmable-adc.git
+   cd programmable-adc
    ```
 
-3. **Initialize your project:**
+2. **Setup Environment:**
    ```bash
+   # Install Vyges CLI (if not already installed)
+   pip install vyges-cli
+   
+   # Initialize project with Vyges
    vyges init --interactive
    ```
 
-4. **Simulate a Hello World test:**
+3. **Run Simulation:**
    ```bash
+   # Run basic functional test
    vyges test --simulation
+   
+   # Run with Cadence PDK support
+   vyges test --simulation --pdk cadence
    ```
 
-5. **Next steps:**
-   - Edit your RTL in `rtl/`
-   - Add testbenches in `tb/`
-   - See [Developer_Guide.md](Developer_Guide.md) for advanced usage, project structure, and customization.
-
-**✅ This approach avoids all remote configuration issues!**
-
-## 🔧 GitHub Actions Workflow
-
-This template includes a comprehensive GitHub Actions workflow (`build-and-test.yml`) that provides automated testing and validation for your IP projects.
-
-### Features
-
-- ✅ **Disabled by default** - Only runs when manually triggered
-- ✅ **Configurable testing** - Choose which components to test
-- ✅ **Multiple simulators** - Support for Verilator and Icarus Verilog
-- ✅ **Multiple platforms** - Support for ASIC and FPGA targets
-- ✅ **Complete EDA toolchain** - Full open-source ASIC design flow
-- ✅ **Project validation** - Checks project structure and metadata
-- ✅ **Linting** - SystemVerilog code quality checks
-- ✅ **Simulation testing** - Testbench execution and validation
-- ✅ **Synthesis checking** - Flow configuration validation
-
-### Quick Start
-
-1. **Enable the workflow** in your IP repository (see detailed instructions below)
-2. **Go to Actions tab** and select "Build and Test IP"
-3. **Click "Run workflow"** and configure your test options
-4. **Review results** and artifacts
-
-### Enabling the Workflow
-
-The workflow is **disabled by default** for the template repository. To enable it in your IP repository:
-
-1. Edit `.github/workflows/build-and-test.yml`
-2. Find the `check-enabled` job
-3. Change the line:
-   ```yaml
-   echo "should-run=false" >> $GITHUB_OUTPUT
-   ```
-   to:
-   ```yaml
-   echo "should-run=true" >> $GITHUB_OUTPUT
+4. **Generate Documentation:**
+   ```bash
+   # Generate test harness report
+   python scripts/generate_test_harness_report.py vyges-metadata.json
+   
+   # View comprehensive documentation
+   open Developer_Guide.md
    ```
 
-### What's Included
+5. **Next Steps:**
+   - Review RTL implementation in `rtl/`
+   - Explore testbenches in `tb/`
+   - Check Cadence PDK integration in `flow/cadence/`
+   - See [Developer_Guide.md](Developer_Guide.md) for advanced usage
 
-The workflow automatically installs a complete open-source EDA toolchain including:
-- **Simulation**: Verilator 5.026, Icarus Verilog, GHDL
-- **Synthesis**: Yosys ≥0.39 with VHDL plugin
-- **Layout**: KLayout, Magic, Netgen
-- **Physical Design**: OpenROAD tools (TritonFPlan, RePlAce, TritonCTS, FastRoute, TritonRoute)
-- **Circuit Design**: XSChem, ngspice
-- **Process Kits**: Open PDKs (sky130, gf180mcu)
-- **Languages**: SystemVerilog, VHDL, Python (cocotb), Ada
+## 🔧 Project Structure
 
-**📖 For complete documentation, see [`.github/workflows/README.md`](.github/workflows/README.md)**
+```
+programmable-adc/
+├── rtl/                    # SystemVerilog RTL implementation
+│   ├── programmable_adc.sv # Main ADC module
+│   ├── pga_model.sv        # Programmable Gain Amplifier
+│   ├── sar_dac.sv          # SAR DAC with calibration
+│   ├── comparator.sv       # High-speed comparator
+│   └── sample_hold.sv      # Sample & Hold circuit
+├── tb/                     # Testbenches and verification
+│   ├── sv_tb/             # SystemVerilog testbenches
+│   ├── cocotb/            # Python-based verification
+│   └── Makefile           # Test automation
+├── flow/                   # EDA tool flows
+│   ├── cadence/           # Cadence PDK integration
+│   ├── openlane/          # Open-source ASIC flow
+│   └── vivado/            # FPGA synthesis flow
+├── scripts/               # Automation scripts
+│   ├── generate_test_harness_report.py
+│   └── code_kpis.py
+├── docs/                  # Documentation
+├── integration/           # Integration examples
+└── vyges-metadata.json   # Vyges metadata specification
+```
+
+## 🧪 Verification & Testing
+
+### Supported Simulators
+- **VCS** (Synopsys) - Primary commercial simulator
+- **Questa** (Mentor/Siemens) - Advanced verification features
+- **Verilator** - Open-source simulation
+- **Spectre** (Cadence) - Analog simulation
+
+### Test Coverage
+- **Functional Tests**: Basic ADC operation and calibration
+- **Performance Tests**: Speed, accuracy, and power measurements
+- **Corner Tests**: Process, voltage, temperature variations
+- **Integration Tests**: SoC-level integration scenarios
+
+### Cadence PDK Integration
+- **Behavioral Models**: Realistic analog circuit modeling
+- **Spectre Netlists**: Ready-to-simulate circuit descriptions
+- **Virtuoso Schematics**: Layout-ready design files
+- **Calibre LVS**: Layout vs. schematic verification
 
 ## 📚 Documentation
 
 - **[Developer_Guide.md](Developer_Guide.md)** - Comprehensive development guide with AI-assisted workflows
-- **[.github/workflows/README.md](.github/workflows/README.md)** - Detailed GitHub Actions workflow documentation
-- **[vyges-metadata-spec/](https://github.com/vyges/vyges-metadata-spec)** - Metadata specification and schema
+- **[docs/architecture.md](docs/architecture.md)** - Detailed ADC architecture and design decisions
+- **[docs/waveforms.md](docs/waveforms.md)** - Simulation waveforms and timing analysis
+- **[flow/cadence/README.md](flow/cadence/README.md)** - Cadence PDK integration guide
+- **[vyges-metadata.json](vyges-metadata.json)** - Complete Vyges metadata specification
 
 ## 🛠️ Development Tools
 
-This template is designed to work with the complete Vyges ecosystem:
+This IP is designed to work with the complete Vyges ecosystem:
 
-- **Vyges CLI** - Command-line interface for IP development
+- **Vyges CLI** - Command-line interface for IP development and automation
 - **Vyges Catalog** - IP catalog and discovery platform
-- **Vyges IDE** - Integrated development environment
-- **AI-assisted development** - Comprehensive AI context and guidance
+- **Vyges IDE** - Integrated development environment with mixed-signal support
+- **AI-assisted development** - Comprehensive AI context and guidance for analog design
+- **Cadence Virtuoso** - Layout and schematic design integration
+- **Spectre/Calibre** - Analog simulation and verification tools
 
 ## 📄 License
 
@@ -115,5 +157,6 @@ Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for gui
 ## 📞 Support
 
 - **Documentation**: [Developer_Guide.md](Developer_Guide.md)
-- **Issues**: [GitHub Issues](https://github.com/vyges/vyges-ip-template/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/vyges/vyges-ip-template/discussions)
+- **Issues**: [GitHub Issues](https://github.com/vyges/programmable-adc/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/vyges/programmable-adc/discussions)
+- **Cadence PDK Support**: [flow/cadence/README.md](flow/cadence/README.md)
