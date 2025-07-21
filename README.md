@@ -18,10 +18,10 @@ A high-performance, programmable Analog-to-Digital Converter (ADC) IP core desig
 
 🛠 **Design & Verification:**
 • SystemVerilog RTL implementation
-• Cadence PDK behavioral models
-• Spectre simulation support
-• Virtuoso layout integration
-• Calibre LVS verification
+• Analog schematic entry (Xschem)
+• Mixed-signal simulation (ngspice/Xyce)
+• Layout design (Magic/KLayout)
+• DRC/LVS verification (Netgen)
 • Comprehensive testbench suite
 
 📊 **Verification Tools:**
@@ -29,7 +29,8 @@ A high-performance, programmable Analog-to-Digital Converter (ADC) IP core desig
 • Coverage-driven verification
 • Automated test harness reporting
 • Multi-simulator support (VCS, Questa, Verilator)
-• Cadence Spectre/Calibre integration
+• Open-source EDA tools (ngspice, Magic, Netgen)
+• Mixed-signal simulation and verification
 
 🎯 **Use Cases:**
 • IoT sensor interfaces
@@ -91,6 +92,21 @@ programmable-adc/
 │   ├── sar_dac.sv          # SAR DAC with calibration
 │   ├── comparator.sv       # High-speed comparator
 │   └── sample_hold.sv      # Sample & Hold circuit
+├── analog/                 # Analog design files (Efabless flow)
+│   ├── xschem/            # Schematic entry (Xschem)
+│   ├── magic/             # Layout database (Magic)
+│   ├── netlist/           # SPICE netlists
+│   ├── gds/               # Final GDS layout
+│   ├── lef/               # Abstract layout views
+│   └── macros/            # Reusable analog components
+├── simulation/             # Mixed-signal simulation
+│   ├── configs/           # Simulation configurations
+│   ├── results/           # Simulation results
+│   └── waveforms/         # Waveform files
+├── layout/                 # Layout verification
+│   ├── constraints/       # Layout constraints
+│   ├── lvs/              # Layout vs Schematic
+│   └── drc/              # Design Rule Checks
 ├── tb/                     # Testbenches and verification
 │   ├── sv_tb/             # SystemVerilog testbenches
 │   ├── cocotb/            # Python-based verification
