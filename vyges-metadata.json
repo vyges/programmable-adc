@@ -368,6 +368,7 @@
     ],
     "simulators": [
       "vcs",
+      "questa",
       "hspice",
       "ams_designer",
       "spectre",
@@ -411,6 +412,10 @@
     "vcs": {
       "status": "verified",
       "description": "Digital RTL simulation"
+    },
+    "questa": {
+      "status": "verified",
+      "description": "Siemens Questa/ModelSim SystemVerilog simulation with GUI and command-line support"
     },
     "design_compiler": {
       "status": "tested",
@@ -545,6 +550,7 @@
       "hspice",
       "ams_designer",
       "vcs",
+      "questa",
       "design_compiler",
       "ic_compiler",
       "spectre",
