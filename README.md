@@ -9,19 +9,23 @@
 A high-performance, programmable Analog-to-Digital Converter (ADC) IP core designed for mixed-signal SoC integration. Features include:
 
 🔧 **Core Features:**
-• Configurable resolution (8-16 bit)
-• Programmable sampling rates (1-100 MSPS)
-• Built-in PGA with gain control
+• Configurable resolution (12, 14, 16 bit)
+• Programmable sampling rates (1-5 MSPS)
+• Built-in PGA with gain control (1, 2, 3, 4)
 • SAR DAC with calibration
 • Advanced sample & hold circuit
 • Real-time performance monitoring
+• **Multi-PDK Support**: 40nm Ultra Low Power and Sky130 open-source PDK
 
 🛠 **Design & Verification:**
 • SystemVerilog RTL implementation
-• Analog schematic entry (Xschem)
-• Mixed-signal simulation (ngspice/Xyce)
-• Layout design (Magic/KLayout)
-• DRC/LVS verification (Netgen)
+• **Multi-PDK Support**:
+  - **40nm Ultra Low Power**: Cadence PDK (Spectre, Virtuoso, Calibre)
+  - **Sky130**: Open-source PDK (Xschem, Magic, ngspice, Netgen)
+• Analog schematic entry (Xschem for Sky130, Virtuoso for Cadence)
+• Mixed-signal simulation (ngspice/Xyce for Sky130, Spectre/AMS Designer for Cadence)
+• Layout design (Magic for Sky130, Virtuoso/IC Compiler for Cadence)
+• DRC/LVS verification (Netgen for Sky130, Calibre for Cadence)
 • Comprehensive testbench suite
 
 📊 **Verification Tools:**
@@ -79,19 +83,22 @@ Built following Vyges IP development standards with automated documentation, ver
 5. **Next Steps:**
    - Review RTL implementation in `rtl/`
    - Explore testbenches in `tb/`
-   - Check Cadence PDK integration in `flow/cadence/`
+   - Check Cadence PDK integration in `rtl/cadence_pdk/`
+   - Check Sky130 PDK integration in `analog/` (Xschem, Magic, ngspice)
    - See [Developer_Guide.md](Developer_Guide.md) for advanced usage
 
 ## 🔧 Project Structure
 
 ```
 programmable-adc/
-├── rtl/                    # SystemVerilog RTL implementation
-│   ├── programmable_adc.sv # Main ADC module
-│   ├── pga_model.sv        # Programmable Gain Amplifier
-│   ├── sar_dac.sv          # SAR DAC with calibration
-│   ├── comparator.sv       # High-speed comparator
-│   └── sample_hold.sv      # Sample & Hold circuit
+├── rtl/                                    # SystemVerilog RTL implementation
+│   ├── programmable_adc.sv                # Main ADC top-level module
+│   ├── programmable_adc_apb_interface.sv   # APB slave interface
+│   ├── programmable_adc_pga_stage.sv      # Programmable Gain Amplifier
+│   ├── programmable_adc_sar_controller.sv # SAR controller
+│   ├── programmable_adc_dac_array.sv      # DAC array
+│   ├── programmable_adc_comparator.sv     # High-speed comparator
+│   └── programmable_adc_sample_hold.sv    # Sample & Hold circuit
 ├── analog/                 # Analog design files (Efabless flow)
 │   ├── xschem/            # Schematic entry (Xschem)
 │   ├── magic/             # Layout database (Magic)
@@ -112,9 +119,18 @@ programmable-adc/
 │   ├── cocotb/            # Python-based verification
 │   └── Makefile           # Test automation
 ├── flow/                   # EDA tool flows
-│   ├── cadence/           # Cadence PDK integration
-│   ├── openlane/          # Open-source ASIC flow
-│   └── vivado/            # FPGA synthesis flow
+│   ├── openlane/          # Open-source ASIC flow (Sky130)
+│   └── synth_report.md    # Synthesis reports
+├── analog/                 # Analog design files (Sky130 & Cadence)
+│   ├── xschem/            # Schematic entry (Xschem for Sky130)
+│   ├── magic/             # Layout database (Magic for Sky130)
+│   ├── netlist/           # SPICE netlists (ngspice for Sky130)
+│   ├── gds/               # Final GDS layout
+│   ├── lef/               # Abstract layout views
+│   └── macros/            # Reusable analog components
+├── rtl/                    # SystemVerilog RTL implementation
+│   ├── cadence_pdk/       # Cadence PDK-specific circuits
+│   └── circuit_blocks/    # Generic circuit blocks
 ├── scripts/               # Automation scripts
 │   ├── generate_test_harness_report.py
 │   └── code_kpis.py
@@ -137,18 +153,30 @@ programmable-adc/
 - **Corner Tests**: Process, voltage, temperature variations
 - **Integration Tests**: SoC-level integration scenarios
 
-### Cadence PDK Integration
+### PDK Support
+
+**40nm Ultra Low Power (Cadence PDK)**:
 - **Behavioral Models**: Realistic analog circuit modeling
 - **Spectre Netlists**: Ready-to-simulate circuit descriptions
 - **Virtuoso Schematics**: Layout-ready design files
 - **Calibre LVS**: Layout vs. schematic verification
+- **Supply Voltage**: 2.8V analog, 1.8V digital
+
+**Sky130 Open-Source PDK**:
+- **Xschem Schematics**: Open-source schematic capture
+- **Magic Layout**: Open-source layout editor
+- **ngspice Simulation**: Open-source circuit simulation
+- **Netgen LVS**: Open-source layout vs. schematic verification
+- **Supply Voltage**: 5.0V analog (high-voltage transistors), 1.8V digital
+- **Technology**: 130nm SkyWater process
 
 ## 📚 Documentation
 
 - **[Developer_Guide.md](Developer_Guide.md)** - Comprehensive development guide with AI-assisted workflows
 - **[docs/architecture.md](docs/architecture.md)** - Detailed ADC architecture and design decisions
 - **[docs/waveforms.md](docs/waveforms.md)** - Simulation waveforms and timing analysis
-- **[flow/cadence/README.md](flow/cadence/README.md)** - Cadence PDK integration guide
+- **[rtl/cadence_pdk/README.md](rtl/cadence_pdk/README.md)** - Cadence PDK integration guide
+- **[analog/README.md](analog/README.md)** - Sky130 PDK integration guide (Xschem, Magic, ngspice)
 - **[vyges-metadata.json](vyges-metadata.json)** - Complete Vyges metadata specification
 
 ## 🛠️ Development Tools

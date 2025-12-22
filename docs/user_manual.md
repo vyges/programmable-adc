@@ -316,7 +316,7 @@ module adc_basic_example (
     wire penable, pwrite, psel, pready;
     
     // ADC instance
-    programmable_adc_top adc_inst (
+    programmable_adc adc_inst (
         .PCLK(clk),
         .PRESETn(reset_n),
         .PADDR(paddr),

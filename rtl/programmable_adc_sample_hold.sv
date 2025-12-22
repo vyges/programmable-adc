@@ -9,7 +9,7 @@
 // Created:     2025
 //=============================================================================
 
-module sample_hold (
+module programmable_adc_sample_hold (
     // Clock and Reset
     input  wire        clk,            // System clock
     input  wire        reset_n,        // Reset (active low)

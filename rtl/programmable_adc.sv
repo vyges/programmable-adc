@@ -12,7 +12,7 @@
 // Created:     2025
 //=============================================================================
 
-module programmable_adc_top (
+module programmable_adc (
     // Clock and Reset
     input  wire        PCLK,           // APB clock (50 MHz)
     input  wire        PRESETn,        // APB reset (active low)
@@ -66,7 +66,7 @@ module programmable_adc_top (
     wire        sar_valid;
     
     // APB Interface Instance
-    apb_interface apb_if (
+    programmable_adc_apb_interface apb_if (
         .PCLK(PCLK),
         .PRESETn(PRESETn),
         .PADDR(PADDR),
@@ -112,7 +112,7 @@ module programmable_adc_top (
                           (channel_sel == 2'b10) ? ch2_in_n : 16'h0000;
     
     // PGA Stage
-    pga_stage pga_inst (
+    programmable_adc_pga_stage pga_inst (
         .clk(PCLK),
         .reset_n(PRESETn),
         .enable(adc_enable),
@@ -124,7 +124,7 @@ module programmable_adc_top (
     );
     
     // Sample & Hold
-    sample_hold sh_inst (
+    programmable_adc_sample_hold sh_inst (
         .clk(PCLK),
         .reset_n(PRESETn),
         .enable(adc_enable),
@@ -136,7 +136,7 @@ module programmable_adc_top (
     );
     
     // SAR Controller
-    sar_controller sar_ctrl (
+    programmable_adc_sar_controller sar_ctrl (
         .clk(PCLK),
         .reset_n(PRESETn),
         .enable(adc_enable),
@@ -154,7 +154,7 @@ module programmable_adc_top (
     );
     
     // DAC Array
-    dac_array dac_inst (
+    programmable_adc_dac_array dac_inst (
         .clk(PCLK),
         .reset_n(PRESETn),
         .enable(adc_enable),
@@ -167,7 +167,7 @@ module programmable_adc_top (
     );
     
     // Comparator
-    comparator comp_inst (
+    programmable_adc_comparator comp_inst (
         .clk(PCLK),
         .reset_n(PRESETn),
         .enable(adc_enable),

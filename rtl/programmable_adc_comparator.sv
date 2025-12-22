@@ -9,7 +9,7 @@
 // Created:     2025
 //=============================================================================
 
-module comparator (
+module programmable_adc_comparator (
     // Clock and Reset
     input  wire        clk,            // System clock
     input  wire        reset_n,        // Reset (active low)

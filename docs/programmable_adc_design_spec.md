@@ -305,13 +305,13 @@ Digital Power:   < 5 mW
 ### RTL Structure
 ```
 rtl/
-├── programmable_adc_top.sv          # Top-level module
-├── pga_stage.sv                     # Programmable Gain Amplifier
-├── sample_hold.sv                   # Sample and Hold circuit
-├── sar_controller.sv                # SAR logic controller
-├── dac_array.sv                     # DAC capacitor array
-├── comparator.sv                    # Dynamic latch comparator
-├── apb_interface.sv                 # APB slave interface
+├── programmable_adc.sv                      # Top-level module
+├── programmable_adc_pga_stage.sv           # Programmable Gain Amplifier
+├── programmable_adc_sample_hold.sv         # Sample and Hold circuit
+├── programmable_adc_sar_controller.sv      # SAR logic controller
+├── programmable_adc_dac_array.sv           # DAC capacitor array
+├── programmable_adc_comparator.sv          # Dynamic latch comparator
+├── programmable_adc_apb_interface.sv       # APB slave interface
 └── adc_registers.sv                 # Register file
 ```
 
@@ -319,9 +319,9 @@ rtl/
 ```
 tb/
 ├── tb_programmable_adc.sv           # Main testbench
-├── tb_pga_stage.sv                  # PGA testbench
-├── tb_sar_controller.sv             # SAR controller testbench
-├── tb_comparator.sv                 # Comparator testbench
+├── tb_programmable_adc_pga_stage.sv         # PGA testbench
+├── tb_programmable_adc_sar_controller.sv   # SAR controller testbench
+├── tb_programmable_adc_comparator.sv       # Comparator testbench
 └── test_vectors/
     ├── dnl_inl_test.v               # Linearity test vectors
     ├── snr_test.v                   # SNR test vectors

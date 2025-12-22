@@ -11,7 +11,7 @@
 // Created:     2025
 //=============================================================================
 
-module pga_stage (
+module programmable_adc_pga_stage (
     // Clock and Reset
     input  wire        clk,            // System clock
     input  wire        reset_n,        // Reset (active low)

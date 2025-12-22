@@ -10,7 +10,7 @@
 // Created:     2025
 //=============================================================================
 
-module dac_array (
+module programmable_adc_dac_array (
     // Clock and Reset
     input  wire        clk,            // System clock
     input  wire        reset_n,        // Reset (active low)

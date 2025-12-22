@@ -40,13 +40,13 @@ The ADC uses a Successive Approximation Register (SAR) architecture with the fol
 
 | File | Module | Description |
 |------|--------|-------------|
-| `programmable_adc_top.sv` | `programmable_adc_top` | Top-level module with all interfaces |
-| `apb_interface.sv` | `apb_interface` | APB slave interface with register map |
-| `pga_stage.sv` | `pga_stage` | Programmable Gain Amplifier (1,2,3,4) |
-| `sample_hold.sv` | `sample_hold` | Sample and Hold circuit |
-| `sar_controller.sv` | `sar_controller` | SAR logic controller |
-| `dac_array.sv` | `dac_array` | Binary-weighted capacitor DAC |
-| `comparator.sv` | `comparator` | Dynamic latch comparator |
+| `programmable_adc.sv` | `programmable_adc` | Top-level module with all interfaces |
+| `programmable_adc_apb_interface.sv` | `programmable_adc_apb_interface` | APB slave interface with register map |
+| `programmable_adc_pga_stage.sv` | `programmable_adc_pga_stage` | Programmable Gain Amplifier (1,2,3,4) |
+| `programmable_adc_sample_hold.sv` | `programmable_adc_sample_hold` | Sample and Hold circuit |
+| `programmable_adc_sar_controller.sv` | `programmable_adc_sar_controller` | SAR logic controller |
+| `programmable_adc_dac_array.sv` | `programmable_adc_dac_array` | Binary-weighted capacitor DAC |
+| `programmable_adc_comparator.sv` | `programmable_adc_comparator` | Dynamic latch comparator |
 
 ### Key Features
 
@@ -60,7 +60,7 @@ The ADC uses a Successive Approximation Register (SAR) architecture with the fol
 
 ## Module Descriptions
 
-### programmable_adc_top
+### programmable_adc
 
 Top-level module that instantiates all sub-modules and provides the complete ADC interface.
 
@@ -70,7 +70,7 @@ Top-level module that instantiates all sub-modules and provides the complete ADC
 - Power supply and reference voltage inputs
 - Status and interrupt outputs
 
-### apb_interface
+### programmable_adc_apb_interface
 
 APB slave interface with complete register map implementation.
 
@@ -80,7 +80,7 @@ APB slave interface with complete register map implementation.
 - `0x08`: Data Register (RO)
 - `0x0C`: Configuration Register (R/W)
 
-### pga_stage
+### programmable_adc_pga_stage
 
 Programmable Gain Amplifier with configurable gains of 1, 2, 3, and 4.
 
@@ -90,7 +90,7 @@ Programmable Gain Amplifier with configurable gains of 1, 2, 3, and 4.
 - Noise < 3 mV RMS
 - Power < 2 mW
 
-### sample_hold
+### programmable_adc_sample_hold
 
 Track and Hold circuit using switched capacitor architecture.
 
@@ -99,7 +99,7 @@ Track and Hold circuit using switched capacitor architecture.
 - Droop rate < 1 LSB/μs
 - Aperture jitter < 1 ps RMS
 
-### sar_controller
+### programmable_adc_sar_controller
 
 Successive Approximation Register controller for ADC conversion.
 
@@ -109,7 +109,7 @@ Successive Approximation Register controller for ADC conversion.
 - Power < 3 mW
 - Auto-conversion mode support
 
-### dac_array
+### programmable_adc_dac_array
 
 Binary-weighted capacitor array DAC for SAR ADC.
 
@@ -118,7 +118,7 @@ Binary-weighted capacitor array DAC for SAR ADC.
 - Matching < 0.1% for critical capacitors
 - Optimized for 40nm process
 
-### comparator
+### programmable_adc_comparator
 
 Dynamic latch comparator for SAR ADC.
 

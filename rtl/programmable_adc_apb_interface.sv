@@ -14,7 +14,7 @@
 // Created:     2025
 //=============================================================================
 
-module apb_interface (
+module programmable_adc_apb_interface (
     // APB Interface
     input  wire        PCLK,           // APB clock
     input  wire        PRESETn,        // APB reset (active low)

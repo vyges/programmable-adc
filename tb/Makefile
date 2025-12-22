@@ -18,7 +18,7 @@
 # Configuration
 SIMULATOR ?= vcs
 TOP_MODULE = tb_programmable_adc
-DUT_MODULE = programmable_adc_top
+DUT_MODULE = programmable_adc
 
 # Directories
 RTL_DIR = ../rtl
@@ -28,13 +28,13 @@ COV_DIR = coverage
 
 # RTL Files
 RTL_FILES = \
-	$(RTL_DIR)/programmable_adc_top.sv \
-	$(RTL_DIR)/apb_interface.sv \
-	$(RTL_DIR)/pga_stage.sv \
-	$(RTL_DIR)/sample_hold.sv \
-	$(RTL_DIR)/sar_controller.sv \
-	$(RTL_DIR)/dac_array.sv \
-	$(RTL_DIR)/comparator.sv
+	$(RTL_DIR)/programmable_adc.sv \
+	$(RTL_DIR)/programmable_adc_apb_interface.sv \
+	$(RTL_DIR)/programmable_adc_pga_stage.sv \
+	$(RTL_DIR)/programmable_adc_sample_hold.sv \
+	$(RTL_DIR)/programmable_adc_sar_controller.sv \
+	$(RTL_DIR)/programmable_adc_dac_array.sv \
+	$(RTL_DIR)/programmable_adc_comparator.sv
 
 # Testbench Files
 TB_FILES = \

@@ -10,7 +10,7 @@
 // Created:     2025
 //=============================================================================
 
-module sar_controller (
+module programmable_adc_sar_controller (
     // Clock and Reset
     input  wire        clk,            // System clock
     input  wire        reset_n,        // Reset (active low)

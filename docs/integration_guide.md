@@ -738,7 +738,7 @@ module adc_system_integration (
     );
     
     // ADC instance
-    programmable_adc_top adc_inst (
+    programmable_adc adc_inst (
         .PCLK(pclk),
         .PRESETn(adc_reset_n),
         .VDDA(vdda),

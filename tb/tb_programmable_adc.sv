@@ -64,7 +64,7 @@ module tb_programmable_adc;
     end
     
     // DUT instantiation
-    programmable_adc_top dut (
+    programmable_adc dut (
         .PCLK(PCLK),
         .PRESETn(PRESETn),
         .PADDR(PADDR),
