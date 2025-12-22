@@ -19,22 +19,24 @@
 SIMULATOR ?= vcs
 TOP_MODULE = tb_programmable_adc
 DUT_MODULE = programmable_adc
+QUESTA_DIR = questa
 
 # Directories
 RTL_DIR = ../rtl
 TB_DIR = .
 LOG_DIR = logs
 COV_DIR = coverage
+QUESTA_DIR = questa
 
-# RTL Files
+# RTL Files (order matters for Questa - dependencies first)
 RTL_FILES = \
-	$(RTL_DIR)/programmable_adc.sv \
 	$(RTL_DIR)/programmable_adc_apb_interface.sv \
 	$(RTL_DIR)/programmable_adc_pga_stage.sv \
 	$(RTL_DIR)/programmable_adc_sample_hold.sv \
 	$(RTL_DIR)/programmable_adc_sar_controller.sv \
 	$(RTL_DIR)/programmable_adc_dac_array.sv \
-	$(RTL_DIR)/programmable_adc_comparator.sv
+	$(RTL_DIR)/programmable_adc_comparator.sv \
+	$(RTL_DIR)/programmable_adc.sv
 
 # Testbench Files
 TB_FILES = \
@@ -47,6 +49,8 @@ ALL_FILES = $(RTL_FILES) $(TB_FILES)
 VCS_OPTS = -full64 -sverilog +v2k -timescale=1ns/1ps -debug_all
 VERILATOR_OPTS = --cc --exe --build -CFLAGS "-std=c++11" -Wall
 IVERILOG_OPTS = -g2012 -Wall -Wno-timescale
+QUESTA_VLOG_OPTS = -sv -work work -timescale 1ns/1ps +acc
+QUESTA_VSIM_OPTS = -c -do run.do
 
 # Default target
 .PHONY: all
@@ -58,6 +62,9 @@ $(LOG_DIR):
 
 $(COV_DIR):
 	mkdir -p $(COV_DIR)
+
+$(QUESTA_DIR):
+	mkdir -p $(QUESTA_DIR)
 
 # VCS Simulation
 .PHONY: sim-vcs
@@ -82,6 +89,45 @@ sim-iverilog: $(LOG_DIR) $(COV_DIR)
 	iverilog $(IVERILOG_OPTS) -o $(TOP_MODULE)_iverilog $(ALL_FILES)
 	vvp $(TOP_MODULE)_iverilog | tee $(LOG_DIR)/iverilog_sim.log
 	@echo "Icarus Verilog simulation completed. Log: $(LOG_DIR)/iverilog_sim.log"
+
+# Questa Simulation
+.PHONY: sim-questa
+sim-questa: $(LOG_DIR) $(COV_DIR) $(QUESTA_DIR)
+	@echo "Running Questa simulation..."
+	@cd $(QUESTA_DIR) && vlog $(QUESTA_VLOG_OPTS) +incdir+../../rtl \
+		../../rtl/programmable_adc_apb_interface.sv \
+		../../rtl/programmable_adc_pga_stage.sv \
+		../../rtl/programmable_adc_sample_hold.sv \
+		../../rtl/programmable_adc_sar_controller.sv \
+		../../rtl/programmable_adc_dac_array.sv \
+		../../rtl/programmable_adc_comparator.sv \
+		../../rtl/programmable_adc.sv \
+		../tb_programmable_adc.sv 2>&1 | tee ../$(LOG_DIR)/questa_compile.log
+	@cd $(QUESTA_DIR) && vsim $(QUESTA_VSIM_OPTS) $(TOP_MODULE) 2>&1 | tee ../$(LOG_DIR)/questa_sim.log
+	@echo "Questa simulation completed. Log: $(LOG_DIR)/questa_sim.log"
+
+# Questa GUI Simulation
+.PHONY: sim-questa-gui
+sim-questa-gui: $(QUESTA_DIR) $(LOG_DIR)
+	@echo "Running Questa GUI simulation..."
+	@cd $(QUESTA_DIR) && vlog $(QUESTA_VLOG_OPTS) +incdir+../../rtl \
+		../../rtl/programmable_adc_apb_interface.sv \
+		../../rtl/programmable_adc_pga_stage.sv \
+		../../rtl/programmable_adc_sample_hold.sv \
+		../../rtl/programmable_adc_sar_controller.sv \
+		../../rtl/programmable_adc_dac_array.sv \
+		../../rtl/programmable_adc_comparator.sv \
+		../../rtl/programmable_adc.sv \
+		../tb_programmable_adc.sv 2>&1 | tee ../$(LOG_DIR)/questa_compile.log || true
+	@cd $(QUESTA_DIR) && vsim -gui -do waves.do $(TOP_MODULE) &
+	@echo "Questa GUI launched. Use 'make sim-questa-gui-stop' to stop."
+
+# Questa GUI Stop
+.PHONY: sim-questa-gui-stop
+sim-questa-gui-stop:
+	@echo "Stopping Questa GUI..."
+	-pkill -f "vsim.*$(TOP_MODULE)" || true
+	@echo "Questa GUI stopped."
 
 # Default simulation (VCS)
 .PHONY: sim
@@ -122,6 +168,10 @@ clean:
 	rm -rf $(LOG_DIR)
 	rm -rf $(COV_DIR)
 	rm -rf obj_dir
+	rm -rf $(QUESTA_DIR)/work
+	rm -rf $(QUESTA_DIR)/transcript
+	rm -rf $(QUESTA_DIR)/vsim.wlf
+	rm -rf $(QUESTA_DIR)/modelsim.ini
 	rm -f $(TOP_MODULE)_vcs
 	rm -f $(TOP_MODULE)_verilator
 	rm -f $(TOP_MODULE)_iverilog
@@ -159,6 +209,8 @@ help:
 	@echo "  sim-vcs      - Run simulation with VCS"
 	@echo "  sim-verilator - Run simulation with Verilator"
 	@echo "  sim-iverilog - Run simulation with Icarus Verilog"
+	@echo "  sim-questa   - Run simulation with Questa (command-line)"
+	@echo "  sim-questa-gui - Run simulation with Questa (GUI)"
 	@echo "  coverage     - Generate coverage report"
 	@echo "  waves        - Generate waveforms"
 	@echo "  lint         - Run RTL linting"
@@ -185,6 +237,8 @@ check-deps:
 	@which vcs > /dev/null 2>&1 || echo "WARNING: VCS not found"
 	@which verilator > /dev/null 2>&1 || echo "WARNING: Verilator not found"
 	@which iverilog > /dev/null 2>&1 || echo "WARNING: Icarus Verilog not found"
+	@which vlog > /dev/null 2>&1 || echo "WARNING: Questa (vlog) not found"
+	@which vsim > /dev/null 2>&1 || echo "WARNING: Questa (vsim) not found"
 	@echo "Dependency check completed."
 
 # Test individual modules
