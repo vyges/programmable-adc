@@ -294,7 +294,7 @@ make help
 These circuit blocks are integrated into the main ADC design:
 
 ```systemverilog
-// In programmable_adc_top.sv
+// In programmable_adc.sv
 pga_circuit pga_inst (/* connections */);
 sample_hold_circuit sh_inst (/* connections */);
 sar_dac_circuit dac_inst (/* connections */);
