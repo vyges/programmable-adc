@@ -5,17 +5,17 @@
 - **IP Name**: programmable-adc
 - **Version**: 1.0.0
 - **Design Type**: Analog/Mixed-Signal
-- **Target Technology**: 40nm Ultra Low Power
+- **Target Technology**: 40nm Ultra Low Power, Sky130 Open-Source PDK
 - **Architecture**: Successive Approximation Register (SAR)
 - **Author**: Vyges Development Team
 - **Created**: 2025-01-27T10:00:00Z
-- **Updated**: 2025-01-27T10:00:00Z
+- **Updated**: 2025-11-15T00:00:00Z
 - **License**: Apache-2.0
 - **Maturity**: Prototype
 
 ## Executive Summary
 
-The Programmable ADC is a high-performance, ultra-low-power analog-to-digital converter designed for 40nm technology node. The IP features configurable resolution (12, 14, 16 bits), 3 simultaneous differential channels, and integrated Programmable Gain Amplifier (PGA) with gains of 1, 2, 3, and 4. The design achieves 5MSPS conversion rate with excellent linearity performance (DNL < 0.5 LSB, INL < 1 LSB) and operates from a 2.8V supply.
+The Programmable ADC is a high-performance, ultra-low-power analog-to-digital converter supporting multiple process technologies. The IP features configurable resolution (12, 14, 16 bits), 3 simultaneous differential channels, and integrated Programmable Gain Amplifier (PGA) with gains of 1, 2, 3, and 4. The design achieves 5MSPS conversion rate with excellent linearity performance (DNL < 0.5 LSB, INL < 1 LSB). The IP supports two PDKs: **40nm Ultra Low Power** (2.8V analog supply) and **Sky130 Open-Source PDK** (5.0V analog supply, 1.8V digital).
 
 ## Functional Requirements
 
@@ -24,10 +24,9 @@ The Programmable ADC is a high-performance, ultra-low-power analog-to-digital co
 - **Channels**: 3 simultaneous differential channels
 - **Input Bandwidth**: 1 MHz
 - **Conversion Rate**: 5 MSPS
-- **Supply Voltage**: VDDA = 2.8V
-- **Reference Voltage**: VREF = VDDA = 2.8V
-- **Common Mode**: VDDA/2 = 1.4V
-- **Technology**: 40nm Ultra Low Power
+- **Supported PDKs**: 
+  - **40nm Ultra Low Power**: VDDA = 2.8V, VREF = 2.8V, VCM = 1.4V, VDDD = 1.8V
+  - **Sky130 Open-Source**: VDDA = 5.0V, VREF = 5.0V, VCM = 2.5V, VDDD = 1.8V
 - **Device Noise**: 1-5 mV typical
 
 ### Performance Requirements
@@ -55,11 +54,24 @@ Channel 2: VIN2P, VIN2N
 ```
 
 #### Reference and Supply
+**40nm Ultra Low Power:**
 ```
 VDDA: 2.8V Analog Supply
 VSSA: 0V Analog Ground
 VREF: 2.8V Reference Voltage
 VCM: 1.4V Common Mode Voltage
+VDDD: 1.8V Digital Supply (optional)
+VSSD: 0V Digital Ground (optional)
+```
+
+**Sky130 Open-Source PDK:**
+```
+VDDA: 5.0V Analog Supply
+VSSA: 0V Analog Ground
+VREF: 5.0V Reference Voltage
+VCM: 2.5V Common Mode Voltage
+VDDD: 1.8V Digital Supply (optional)
+VSSD: 0V Digital Ground (optional)
 ```
 
 ### Digital Interfaces
@@ -230,18 +242,20 @@ Comparator → SAR Logic: 10 ns
 ## Pinout and Package
 
 ### Analog Pins
-| Pin Name | Type | Description | Voltage Range |
-|----------|------|-------------|---------------|
-| VDDA     | Power| Analog Supply | 2.8V ±5% |
-| VSSA     | Power| Analog Ground | 0V |
-| VREF     | Input| Reference Voltage | 2.8V ±1% |
-| VCM      | Input| Common Mode | 1.4V ±2% |
-| VIN0P    | Input| Channel 0 Positive | 0V to 2.8V |
-| VIN0N    | Input| Channel 0 Negative | 0V to 2.8V |
-| VIN1P    | Input| Channel 1 Positive | 0V to 2.8V |
-| VIN1N    | Input| Channel 1 Negative | 0V to 2.8V |
-| VIN2P    | Input| Channel 2 Positive | 0V to 2.8V |
-| VIN2N    | Input| Channel 2 Negative | 0V to 2.8V |
+| Pin Name | Type | Description | Voltage Range (40nm) | Voltage Range (Sky130) |
+|----------|------|-------------|----------------------|------------------------|
+| VDDA     | Power| Analog Supply | 2.8V ±5% | 5.0V ±5% |
+| VSSA     | Power| Analog Ground | 0V | 0V |
+| VREF     | Input| Reference Voltage | 2.8V ±1% | 5.0V ±1% |
+| VCM      | Input| Common Mode | 1.4V ±2% | 2.5V ±2% |
+| VIN0P    | Input| Channel 0 Positive | 0V to 2.8V | 0V to 5.0V |
+| VIN0N    | Input| Channel 0 Negative | 0V to 2.8V | 0V to 5.0V |
+| VIN1P    | Input| Channel 1 Positive | 0V to 2.8V | 0V to 5.0V |
+| VIN1N    | Input| Channel 1 Negative | 0V to 2.8V | 0V to 5.0V |
+| VIN2P    | Input| Channel 2 Positive | 0V to 2.8V | 0V to 5.0V |
+| VIN2N    | Input| Channel 2 Negative | 0V to 2.8V | 0V to 5.0V |
+| VDDD     | Power| Digital Supply (optional) | 1.8V ±5% | 1.8V ±5% |
+| VSSD     | Power| Digital Ground (optional) | 0V | 0V |
 
 ### Digital Pins
 | Pin Name | Type | Description | Voltage Range |
@@ -260,8 +274,14 @@ Comparator → SAR Logic: 10 ns
 ## Power Management
 
 ### Power Domains
+**40nm Ultra Low Power:**
 - **Analog Domain**: VDDA (2.8V) - PGA, S/H, DAC, Comparator
-- **Digital Domain**: VDD (1.8V) - SAR Controller, APB Interface
+- **Digital Domain**: VDDD (1.8V) - SAR Controller, APB Interface
+- **Isolation**: Level shifters between domains
+
+**Sky130 Open-Source PDK:**
+- **Analog Domain**: VDDA (5.0V) - PGA, S/H, DAC, Comparator
+- **Digital Domain**: VDDD (1.8V) - SAR Controller, APB Interface
 - **Isolation**: Level shifters between domains
 
 ### Power Consumption
@@ -311,8 +331,12 @@ rtl/
 ├── programmable_adc_sar_controller.sv      # SAR logic controller
 ├── programmable_adc_dac_array.sv           # DAC capacitor array
 ├── programmable_adc_comparator.sv          # Dynamic latch comparator
-├── programmable_adc_apb_interface.sv       # APB slave interface
-└── adc_registers.sv                 # Register file
+├── programmable_adc_apb_interface.sv       # APB slave interface (includes register map)
+└── circuit_blocks/                          # Analog circuit blocks
+    ├── pga_circuit.sv                       # PGA circuit implementation
+    ├── sample_hold_circuit.sv               # Sample & Hold circuit
+    ├── sar_dac_circuit.sv                   # SAR DAC circuit
+    └── comparator_circuit.sv                # Comparator circuit
 ```
 
 ### Testbench Structure
@@ -331,10 +355,18 @@ tb/
 ## Flow Configuration
 
 ### Synthesis Flow
+**40nm Ultra Low Power:**
 - **Tool**: Design Compiler
 - **Target**: 40nm Ultra Low Power
 - **Constraints**: timing.sdc
 - **Library**: 40nm ULP standard cells
+
+**Sky130 Open-Source PDK:**
+- **Tool**: Yosys (open-source)
+- **Target**: Sky130 130nm process
+- **Constraints**: timing.sdc
+- **Library**: Sky130 standard cells
+- **Layout**: Magic, OpenLane
 
 ### Layout Flow
 - **Tool**: IC Compiler
@@ -422,7 +454,7 @@ tb/
 - **IP Name**: programmable-adc
 - **Version**: 1.0.0
 - **License**: Apache-2.0
-- **Target**: ASIC (40nm ULP)
+- **Target**: ASIC (40nm ULP, Sky130)
 - **Design Type**: Analog/Mixed-Signal
 - **Interfaces**: APB, Analog I/O
 - **Performance**: 5MSPS, 16-bit, <10mW
@@ -449,6 +481,6 @@ tb/
 
 ## Conclusion
 
-The Programmable ADC design specification provides a comprehensive framework for developing a high-performance, ultra-low-power analog-to-digital converter. The design leverages 40nm ultra-low-power technology to achieve 5MSPS conversion rate with excellent linearity performance. The integrated PGA and configurable resolution make this IP suitable for a wide range of applications requiring high-precision analog-to-digital conversion.
+The Programmable ADC design specification provides a comprehensive framework for developing a high-performance, ultra-low-power analog-to-digital converter. The design supports multiple process technologies: **40nm ultra-low-power** for commercial ASIC applications and **Sky130 open-source PDK** for research, education, and open-source hardware projects. The design achieves 5MSPS conversion rate with excellent linearity performance across both technologies. The integrated PGA and configurable resolution make this IP suitable for a wide range of applications requiring high-precision analog-to-digital conversion.
 
 The specification includes detailed interface definitions, register maps, timing requirements, and validation strategies to ensure successful implementation and integration. The modular architecture allows for efficient development and testing of individual blocks while maintaining system-level performance requirements. 
