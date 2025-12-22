@@ -7,7 +7,7 @@
 //              Achieves 5MSPS conversion rate with excellent linearity.
 //
 // Architecture: Successive Approximation Register (SAR)
-// Technology:   40nm Ultra Low Power
+// Technology:   40nm Ultra Low Power, Sky130 Open-Source PDK
 // Author:       Vyges Development Team
 // Created:     2025
 //=============================================================================
@@ -153,6 +153,11 @@ module programmable_adc (
         .valid(sar_valid)
     );
     
+    // Convert analog reference voltages to digital representation (for simulation)
+    wire [15:0] vref_digital, vcm_digital;
+    assign vref_digital = (VREF > 0) ? 16'hFFFF : 16'h0000;  // Full scale for VREF
+    assign vcm_digital = (VCM > 0) ? 16'h8000 : 16'h0000;   // Mid-scale for VCM
+    
     // DAC Array
     programmable_adc_dac_array dac_inst (
         .clk(PCLK),
@@ -160,8 +165,8 @@ module programmable_adc (
         .enable(adc_enable),
         .resolution(resolution),
         .sar_data(sar_data),
-        .vref(VREF),
-        .vcm(VCM),
+        .vref(vref_digital),
+        .vcm(vcm_digital),
         .vout_p(dac_out_p),
         .vout_n(dac_out_n)
     );

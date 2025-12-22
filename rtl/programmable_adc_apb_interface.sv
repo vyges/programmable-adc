@@ -43,9 +43,9 @@ module programmable_adc_apb_interface (
 
     // Register definitions
     reg [31:0] control_reg;    // 0x00: Control Register
-    reg [31:0] status_reg;     // 0x04: Status Register
-    reg [31:0] data_reg;       // 0x08: Data Register
     reg [31:0] config_reg;     // 0x0C: Configuration Register
+    // Note: Status (0x04) and Data (0x08) registers are read-only
+    // and constructed on-the-fly from status signals
     
     // APB state machine
     reg [1:0] apb_state;
@@ -120,6 +120,8 @@ module programmable_adc_apb_interface (
     end
     
     // Control signal generation from control register
+    reg control_reg_17_prev;  // Previous value of control_reg[17] for edge detection
+    
     always @(posedge PCLK or negedge PRESETn) begin
         if (!PRESETn) begin
             pga_gain <= 2'b00;      // Gain = 1
@@ -127,12 +129,22 @@ module programmable_adc_apb_interface (
             channel_sel <= 2'b00;   // Channel 0
             start_conv <= 1'b0;
             adc_enable <= 1'b0;
+            control_reg_17_prev <= 1'b0;
         end else begin
             pga_gain <= control_reg[23:22];
             resolution <= control_reg[21:20];
             channel_sel <= control_reg[19:18];
-            start_conv <= control_reg[17];
             adc_enable <= control_reg[16];
+            
+            // Generate start_conv pulse on rising edge of control_reg[17]
+            // Auto-clears after one clock cycle
+            if (control_reg[17] && !control_reg_17_prev) begin
+                start_conv <= 1'b1;  // Pulse on rising edge
+            end else begin
+                start_conv <= 1'b0;  // Auto-clear
+            end
+            
+            control_reg_17_prev <= control_reg[17];
         end
     end
     
@@ -144,17 +156,6 @@ module programmable_adc_apb_interface (
         end else begin
             irq_enable <= config_reg[7];
             auto_mode <= config_reg[6];
-        end
-    end
-    
-    // Auto-clear start_conv signal after one clock cycle
-    always @(posedge PCLK or negedge PRESETn) begin
-        if (!PRESETn) begin
-            start_conv <= 1'b0;
-        end else begin
-            if (start_conv) begin
-                start_conv <= 1'b0;
-            end
         end
     end
 
