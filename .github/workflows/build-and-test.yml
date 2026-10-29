@@ -53,7 +53,7 @@ on:
 jobs:
   # Check if workflow should run
   check-enabled:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-${{ vars.VYGES_UBUNTU_VERSION || '24.04' }}
     outputs:
       should-run: ${{ steps.check.outputs.should-run }}
     steps:
@@ -262,7 +262,7 @@ jobs:
   validate:
     needs: [check-enabled, setup]
     if: needs.check-enabled.outputs.should-run == 'true' && github.event.inputs.test_validation == 'true'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-${{ vars.VYGES_UBUNTU_VERSION || '24.04' }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v7
@@ -314,7 +314,7 @@ jobs:
   lint:
     needs: [check-enabled, setup]
     if: needs.check-enabled.outputs.should-run == 'true' && github.event.inputs.test_linting == 'true'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-${{ vars.VYGES_UBUNTU_VERSION || '24.04' }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v7
@@ -360,7 +360,7 @@ jobs:
   simulation:
     needs: [check-enabled, setup]
     if: needs.check-enabled.outputs.should-run == 'true' && github.event.inputs.test_simulation == 'true'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-${{ vars.VYGES_UBUNTU_VERSION || '24.04' }}
     strategy:
       matrix:
         simulator: [verilator, icarus]
@@ -439,7 +439,7 @@ jobs:
   synthesis:
     needs: [check-enabled, setup]
     if: needs.check-enabled.outputs.should-run == 'true' && github.event.inputs.test_synthesis == 'true'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-${{ vars.VYGES_UBUNTU_VERSION || '24.04' }}
     strategy:
       matrix:
         platform: [asic, fpga]
@@ -486,7 +486,7 @@ jobs:
   report:
     needs: [check-enabled, validate, lint, simulation, synthesis]
     if: needs.check-enabled.outputs.should-run == 'true'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-${{ vars.VYGES_UBUNTU_VERSION || '24.04' }}
     steps:
       - name: Generate test report
         run: |
@@ -516,7 +516,7 @@ jobs:
   status:
     needs: [check-enabled, validate, lint, simulation, synthesis, report]
     if: always()
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-${{ vars.VYGES_UBUNTU_VERSION || '24.04' }}
     steps:
       - name: Workflow status
         run: |
